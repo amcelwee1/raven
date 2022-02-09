@@ -65,7 +65,7 @@ public class ReadPoem {
 			//System.out.println(sorted);
 			
 		//printing every entry in the sorted hashmap on a new line
-		for(Map.Entry entry : sorted.entrySet()) {
+		for(Map.Entry<String,Integer> entry : sorted.entrySet()) {
 			System.out.println(entry);
 		}
 	
