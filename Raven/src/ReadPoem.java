@@ -7,48 +7,63 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class ReadPoem extends Application {
 	
+	//declaring variables for the button, the labels, the results pane
 	Button button;
+	Label label1;
+	Label label2;
 	TextArea text;
 	
 	
+	//building the FX Stage
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
+		//instantiating the button
 		button = new Button();
+		button.setFont(Font.font("Impact",20));
 		button.setText("Analyze Poem");
+		
+		//instantiating the labels
+		label1 = new Label();
+		label1.setFont(Font.font("Verdana"));
+		label1.setText("The Raven");
+		label2 = new Label();
+		label2.setFont(Font.font("Verdana"));
+		label2.setText("By: Edgar Allen Poe");
+		
+		//instantiating the text area
 		text = new TextArea();
+		text.setPrefHeight(400);
+		text.setPrefWidth(300);
 		
-		
-
-		VBox layout = new VBox(5);
+		//creating the vertical box to stack the objects with appropriate padding
+		VBox layout = new VBox(10);
 		layout.setAlignment(Pos.TOP_CENTER);
 		layout.setPadding(new Insets(5,0,5,0));
 		layout.getChildren().add(button);
+		layout.getChildren().add(label1);
+		layout.getChildren().add(label2);
 		layout.getChildren().add(text);
 		
-		
-		Scene scene = new Scene(layout, 300, 300);
-		primaryStage.setTitle("Title");
+		//creating the scene and defining the size
+		Scene scene = new Scene(layout, 300, 600);
+		primaryStage.setTitle("Analyze The Raven");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		
+		//kicking off the code by setting the action on the button
 		button.setOnAction(event -> {
 			button.setText("Complete");
 			Document raven = null;
@@ -100,9 +115,12 @@ public class ReadPoem extends Application {
 			.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 			.forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
 			//System.out.println(sorted);
-			
+
 		//printing every entry in the sorted hashmap on a new line
 		for(Map.Entry<String,Integer> entry : sorted.entrySet()) {
+			
+			
+			//printing to the text area instead of the console
 			text.setText(text.getText()+entry+"\n");
 			//System.out.println(entry);
 		}
@@ -121,7 +139,7 @@ public class ReadPoem extends Application {
 			}
 	
 	
-	
+	//putting it all together in the main
 	public static void main(String[] args)  throws IOException {
 		launch(args);	
 	}
