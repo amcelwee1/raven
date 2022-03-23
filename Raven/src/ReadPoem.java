@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.util.*;
 
@@ -5,22 +6,58 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public class ReadPoem {
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class ReadPoem extends Application {
 	
-	//method to loop through the arraylist and count occurrences
-	public static Map<String, Integer> countOccurrences(ArrayList<String> list) {
-		Map<String, Integer> tmap = new TreeMap<String, Integer>();
-			for (String st : list) {
-				Integer n = tmap.get(st);
-				tmap.put(st,  (n == null) ? 1 : n + 1);
+	Button button;
+	TextArea text;
+	
+	
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		
+		button = new Button();
+		button.setText("Analyze Poem");
+		text = new TextArea();
+		
+		
+
+		VBox layout = new VBox(5);
+		layout.setAlignment(Pos.TOP_CENTER);
+		layout.setPadding(new Insets(5,0,5,0));
+		layout.getChildren().add(button);
+		layout.getChildren().add(text);
+		
+		
+		Scene scene = new Scene(layout, 300, 300);
+		primaryStage.setTitle("Title");
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		
+		
+		button.setOnAction(event -> {
+			button.setText("Complete");
+			Document raven = null;
+			try {
+				raven = Jsoup.connect("https://www.gutenberg.org/files/1065/1065-h/1065-h.htm").get();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-		return tmap;
-	}
-	
-	public static void main(String[] args)  throws IOException {
-		Document raven;
-			raven = Jsoup.connect("https://www.gutenberg.org/files/1065/1065-h/1065-h.htm").get();
 			
 		//collecting just the pieces of the web page that we need using HTML tags
 			Elements header1 = raven.getElementsByTag("h1");
@@ -66,10 +103,29 @@ public class ReadPoem {
 			
 		//printing every entry in the sorted hashmap on a new line
 		for(Map.Entry<String,Integer> entry : sorted.entrySet()) {
-			System.out.println(entry);
+			text.setText(text.getText()+entry+"\n");
+			//System.out.println(entry);
 		}
-	
+		});
 	}
+	
+	//method to loop through the arraylist and count occurrences
+			public static Map<String, Integer> countOccurrences(ArrayList<String> list) {
+				Map<String, Integer> tmap = new TreeMap<String, Integer>();
+					for (String st : list) {
+						Integer n = tmap.get(st);
+						tmap.put(st,  (n == null) ? 1 : n + 1);
+					}
+					
+				return tmap;
+			}
+	
+	
+	
+	public static void main(String[] args)  throws IOException {
+		launch(args);	
+	}
+	
+	
 
 }
-
