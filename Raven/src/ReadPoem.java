@@ -98,10 +98,11 @@ public class ReadPoem extends Application {
 			
 		//converting the full string to an array of strings
 		String[] words = poem.split("\\s+");
-		//System.out.println(Arrays.toString(words));
+		System.out.println(Arrays.toString(words));
 			
 		//converting the array of strings to an arraylist so that it can be passed to countOccurrences
 		ArrayList<String> strList = new ArrayList<String>(Arrays.asList(words));
+		
 			
 		//pass the arraylist to the occurrence counter and get a returned unsorted map with occurrence
 		Map<String,Integer> unSorted = countOccurrences(strList);
@@ -134,14 +135,15 @@ public class ReadPoem extends Application {
 						Integer n = tmap.get(st);
 						tmap.put(st,  (n == null) ? 1 : n + 1);
 					}
-					
+				System.out.println(tmap);	
 				return tmap;
 			}
 	
 	
 	//putting it all together in the main
 	public static void main(String[] args)  throws IOException {
-		launch(args);	
+		launch(args);
+		
 	}
 	
 	
