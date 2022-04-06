@@ -16,17 +16,20 @@ class ReadPoemTest {
 
 	@Test
 	final void testStartStage() {
-		fail("Not yet implemented"); // TODO
+        String str1="This is the testcase in this class";
+        assertEquals("This is the testcase in this class", str1); // TODO
 	}
 
 	@Test
 	final void testCountOccurrences() {
-		fail("Not yet implemented"); // TODO
+        String str2="This is not the testcase in this class";
+        assertEquals("This is the testcase in this class", str2);; // TODO
 	}
 
 	@Test
 	final void testMain() {
-		fail("Not yet implemented"); // TODO
+        String str3="This is another testcase in this class";
+        assertEquals("This is another testcase in this class", str3); // TODO
 	}
 
 }
