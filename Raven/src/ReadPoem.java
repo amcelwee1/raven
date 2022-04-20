@@ -16,6 +16,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+//import java.sql.ResultSet;
+//import java.sql.Statement;
 /**
  * 
  * @author angelamcelwee
@@ -123,19 +130,71 @@ public class ReadPoem extends Application {
 		poem = poem.replaceAll("\\W",  " ");
 		poem = poem.toLowerCase();
 		poem = poem.strip();
-		//System.out.println(poem);
+		//System.out.println(poem); 
 			
 		/**
 		 * converting the full string to an array of strings
 		 */
 		String[] words = poem.split("\\s+");
-		System.out.println(Arrays.toString(words));
+		//System.out.println(Arrays.toString(words));
+		
+	
+		/**
+		 * Turning the String Array into a HashSet so that I can remove duplicates to insert into the database
+		 */
+		Set<String> dbSet = new HashSet<String>();
+		Collections.addAll(dbSet, words);
+		
+		/**
+		 * Connecting to the database
+		 */
+		Connection con = null;
+		String url = "jdbc:mysql://localhost:3306/wordOccurrences";
+		String username = "root";
+		String password = "rootPassword";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection(url, username, password);			
+			System.out.println("Connected");
 			
+			/**
+			 * Creating the insert statements that will add the individual words to the database
+			 */
+			String query = " insert into word (word)" + " values (?)";
+			PreparedStatement stmt = con.prepareStatement(query);
+			//iterating through each word in the HashSet
+			for (String tempStr : dbSet) {
+			stmt.setString(1, tempStr);
+			//executing the insert statements
+			stmt.execute();
+			//System.out.println(stmt);
+			}
+			
+			
+			} catch (SQLException ex) {
+				throw new Error("Error ", ex);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				try {
+					if (con !=null) {
+						con.close();
+					}
+				}catch (SQLException ex) {
+					System.out.println(ex.getMessage());
+				}
+			}
+		
+		
 		/**
 		 * converting the array of strings to an arraylist so that it can 
 		 * be passed to countOccurrences
 		 */
 		ArrayList<String> strList = new ArrayList<String>(Arrays.asList(words));
+		//System.out.println(strList);
+		
+			
 		
 			
 		/**
@@ -184,11 +243,13 @@ public class ReadPoem extends Application {
 	 */
 			public static Map<String, Integer> countOccurrences(ArrayList<String> list) {
 				Map<String, Integer> tmap = new TreeMap<String, Integer>();
+				
+					
 					for (String st : list) {
 						Integer n = tmap.get(st);
 						tmap.put(st,  (n == null) ? 1 : n + 1);
 					}
-				System.out.println(tmap);	
+				//System.out.println(tmap);	
 				return tmap;
 			}
 	
